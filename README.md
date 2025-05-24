@@ -13,7 +13,7 @@ This app focuses on helping fans of a collectible card game to keep a track of t
 
 ## Brief list of features
 
-- User accounts
+- User accounts with JWT authorization
 - Users can keep track of their collection, wishlist and market orders
 - Public user profiles
 - A place to browse through all existing cards with the option of adding them to personal collection or wishlist
@@ -25,7 +25,7 @@ This app focuses on helping fans of a collectible card game to keep a track of t
 
 ## Installation and requirements
 
-This app needs [backend]() part of the project in order to work propperly.
+This app needs [backend](https://github.com/pswierzbinski/CardCollectingProjectDb) part of the project in order to work propperly.
 
 Install the required node modules
 ```bash
