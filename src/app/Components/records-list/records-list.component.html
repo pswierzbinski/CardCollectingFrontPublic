@@ -1,0 +1,87 @@
+<div>
+    <div id="text-content" class="pt-5 pl-5">
+        <div class="flex">
+            <div class="w-48 border-b-2 pl-2 border-opacity-10">
+                @if(listType=='sell'){<p class="text-xl pt-3">Seller</p>}
+                @else{<p class="text-xl pt-3">Buyer</p>}
+            </div>
+            <button class="pl-2 w-36 border-b-2 border-opacity-10 flex-row flex" (click)="sortQuantity()">
+                <p class="text-xl pt-3">Quantity</p>
+                @if(sortType == 'quantity'){<tui-icon icon="@tui.move-up" [style.height.px]="20" [style.width.px]="20"
+                    [style.color]="000" class="self-center mt-2" />}
+                @else if(sortType =='quantityDesc'){<tui-icon icon="@tui.move-down" [style.height.px]="20"
+                    [style.width.px]="20" [style.color]="000" class="self-center mt-2" />}
+            </button>
+            <button class="pl-2 pb-1 w-36 border-b-2 mr-5 flex-row flex" (click)="sortPrice()">
+                <p class="text-xl pt-3">Unit price</p>
+                @if(sortType == 'price'){<tui-icon icon="@tui.move-up" [style.height.px]="20" [style.width.px]="20"
+                    [style.color]="000" class="self-center mt-2" />}
+                @else if(sortType =='priceDesc'){<tui-icon icon="@tui.move-down" [style.height.px]="20"
+                    [style.width.px]="20" [style.color]="000" class="self-center mt-2" />}
+            </button>
+        </div>
+        @if(records.length != 0){
+        <ul class="z-10 flex text-wrap items-center h-16" *ngFor="let mr of records; index as i;">
+            <li class="border-b-2 h-full w-48 flex flex-row items-center cursor-pointer"
+                routerLink="/profile/{{mr.userName}}">
+                <tui-avatar class=" bg-secondary" [size]="'xs'">
+                    <img src="user.png" />
+                </tui-avatar>
+                <p class="pl-1"> {{mr.userName}}</p>
+            </li>
+            <li class="text-wrap w-36 border-b-2 h-full flex pl-2 items-center">
+                <p>{{mr.quantity}}</p>
+            </li>
+            <li class="text-wrap w-[4.8rem] border-b-2 h-full flex pl-2 items-center">
+                <p>{{mr.price}}</p>
+            </li>
+            @if(accountService.currentUserSignal()?.username == mr.userName){
+            <li class="w-16 border-b-2 flex flex-row gap-2 items-center h-full">
+                <button (click)="showDialog(editDialog,mr.id,mr.quantity,mr.price)"><tui-icon icon="@tui.pencil"
+                        [style.height.px]="30" [style.width.px]="30" [style.color]="000" /></button>
+                <button (click)="showCancelDialog(deleteConfirm, mr.id)"><tui-icon icon="@tui.trash-2"
+                        [style.height.px]="30" [style.width.px]="30" [style.color]="000" /></button>
+            </li>
+            }@else {
+            <li class="w-16 border-b-2 flex items-center justify-center h-full">
+                <button (click)="message(mr.userName)">
+                    <tui-icon icon="@tui.mail" [style.height.px]="30" [style.width.px]="30" [style.color]="000" />
+                </button>
+            </li>
+            }
+        </ul>
+        }@else {
+        <p class="text-center">There are no orders yet</p>
+        <p class="text-center"> be first to place one!</p>
+        }
+        <ng-template #editDialog let-observer>
+            <form [formGroup]="editOrderForm" (ngSubmit)="observer.next(true);observer.complete()" #actorForm="ngForm">
+
+                <tui-input-number tuiTextfieldPostfix=" PLN" [min]="0.01" [step]="0.01"
+                    [tuiNumberFormat]="{precision: 2}" formControlName="priceValue">
+                    Unit price
+                </tui-input-number>
+                <tui-input-number tuiTextfieldPrefix="x " [min]=1 [step]="1" [tuiNumberFormat]="{precision: 0}"
+                    formControlName="quantityValue">
+                    Quantity
+                </tui-input-number>
+                <button size="m" tuiButton type='submit' [disabled]="!editOrderForm.valid">
+                    Save changes
+                </button>
+            </form>
+        </ng-template>
+        <!-- delete order confirmation -->
+        <ng-template #deleteConfirm let-observer>
+            <div class="wrapper">
+                <p class="text-lg ml-5"><strong>This action will remove the market order.</strong></p>
+                <p class="pt-1 ml-5 text-base">Are You sure?</p>
+                <button size="m" tuiButton type="button" (click)="observer.next(true);observer.complete()">
+                    Yes
+                </button>
+                <button size="m" tuiButton type="button" (click)="observer.next(false);observer.complete()">
+                    No
+                </button>
+            </div>
+        </ng-template>
+    </div>
+</div>

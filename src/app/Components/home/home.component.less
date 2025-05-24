@@ -1,0 +1,16 @@
+@import '@taiga-ui/core/styles/taiga-ui-local.less';
+
+//style for carousel from taiga-ui template
+.item {
+    .transition(~'box-shadow, transform');
+
+    display: block;
+    max-block-size: 15rem;
+    margin: 2rem auto;
+    border-radius: 10%;
+
+    &_active {
+        box-shadow: var(--tui-shadow-medium);
+        transform: scale(1.2);
+    }
+}

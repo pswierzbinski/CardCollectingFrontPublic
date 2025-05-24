@@ -1,0 +1,91 @@
+<div class="bg-main-bg  rounded-2xl border-main-bg border-opacity-30  w-[81rem] min-h-[10rem]
+                shadow items-center relative" style="font-family: Lato-Black; color: #fff">
+    <div class="pt-2 pl-2 flex flex-row">
+        <div class="w-1/3">
+            <ng-multiselect-dropdown class="" [placeholder]="'Filter cards in wishlist by type'"
+                [settings]="dropdownSettings" [data]="types" [(ngModel)]="selectedTypes"
+                (onSelect)="onItemSelect($event)" (onSelectAll)="onSelectAll($event)" (onDeSelect)="onDeSelect($event)">
+            </ng-multiselect-dropdown>
+        </div>
+    </div>
+    <div id="text-content" class="pt-5 pl-5">
+        <div class="flex">
+            @if(this.simpleWishlist){
+            <p class="text-xl border-b-2 pl-1.5 pt-2.5">
+                <tui-icon icon="@tui.material.filled.favorite" [style.height.px]="25" [style.width.px]="25"
+                    [style.color]="000" />
+            </p>
+            }
+            <button class="w-[24.5rem] border-b-2 pl-2 border-opacity-10 flex-row flex" (click)="sortName()">
+                <p class="text-xl pt-3">Name</p>
+                @if(sortType == 'name'){<p class="text-3xl">↑</p>}
+                @if(sortType == 'nameDesc'){<p class="text-3xl">↓</p>}
+            </button>
+            <div class="pl-2 w-[24rem] border-b-2 border-opacity-10">
+                <p class="text-xl pt-3">Type</p>
+            </div>
+            <div class="pl-2 w-[24rem] border-b-2 border-opacity-10">
+                <p class="text-xl pt-3">Faction</p>
+            </div>
+            <button class="pl-2 pb-1 w-[5.5rem] border-b-2 mr-5 flex-row flex" (click)="sortId()">
+                <p class="text-xl pt-3">Id</p>
+                @if(sortType == 'id'){<p class="text-3xl">↑</p>}
+                @if(sortType =='idDesc'){<p class="text-3xl">↓</p>}
+            </button>
+        </div>@if(wishlist.length > 0){
+        <ul class="z-10 pl-1 flex text-wrap" *ngFor="let cc of filteredCards.slice(indx*10,indx*10+10); index as i;">
+            @if(this.simpleWishlist && userName == this.accountService.currentUserSignal()?.username){
+            @if(this.simpleWishlist && this.simpleWishlist.includes(cc.id)){<button
+                class="text-white font-bold self-top text-center items-center" #removeWishlist
+                (click)="removeFromWishlist(cc.id)" [tuiHint]="removeFromWishlistTooltip" tuiHintAppearance='dark'
+                tuiHintDirection="bottom-left" [tuiHintShowDelay]="50" [tuiHintHideDelay]="100" tuiHintPointer><tui-icon
+                    icon="@tui.material.filled.favorite" [style.height.px]="25" [style.width.px]="25"
+                    [style.color]="000" /></button>}
+            @else{<button class="text-white font-bold self-top text-center items-center" #addWishlist
+                (click)="addToWishlist(cc.id)" [tuiHint]="addToWishlistTooltip" tuiHintAppearance='dark'
+                tuiHintDirection="bottom-left" [tuiHintShowDelay]="50" [tuiHintHideDelay]="100" tuiHintPointer><tui-icon
+                    icon="@tui.material.filled.favorite_border" [style.height.px]="25" [style.width.px]="25"
+                    [style.color]="000" /></button>}
+            }
+            <div [tuiHint]="tooltip" tuiHintAppearance='dark' tuiHintDirection="bottom-left" [tuiHintShowDelay]="50"
+                [tuiHintHideDelay]="100" tuiHintPointer routerLink="/card/{{cc.id}}"
+                class="cursor-pointer text-wrap w-[25.5rem] max-w-[25.5rem] min-h-6 border-b-2 pl-2 pt-3 pb-3">
+                <p>{{cc.name}} </p>
+            </div>
+            <div class="text-wrap w-[23.5rem] max-w-[23.5rem] min-h-6 border-b-2 pt-3 pb-3">
+                <p>{{cc.type}}</p>
+            </div>
+            <div class="text-wrap w-[22.5rem] max-w-[22.5rem] min-h-6 border-b-2 pl-1 pt-3 pb-3">
+                <p>{{cc.faction}}</p>
+            </div>
+            <div class="text-wrap min-h-6 w-[3.9rem] max-w-[3.9rem] border-b-2 pl-7 pt-3 pb-3">
+                <p>{{cc.id}}</p>
+            </div>
+            <ng-template #tooltip class="">
+                <picture>
+                    <img src="{{this.imagePrefix}}{{cc.name}}" (error)="useDefaultImage($event)" class="w-48" />
+                </picture>
+            </ng-template>
+        </ul>
+        @if(this.cards){
+        <ng-template #idx let-idx>
+            {{idx+1}}
+        </ng-template>
+        <tui-pagination [content]="idx" [length]="length" (indexChange)="goToPage($event)" />
+        }
+        } @else{
+        <div class="text-center py-5 text-lg">
+            <p>You do not have any cards in the wishlist yet</p>
+            <p routerLink="/browse" class="hover:cursor-pointer">Browse all cards to find something you like</p>
+        </div>
+        }
+        <!-- this is hover on the plus button next to each card -->
+        <ng-template #addToWishlistTooltip class="">
+            Add to wishlist
+        </ng-template>
+        <ng-template #removeFromWishlistTooltip class="">
+            Remove from wishlist
+        </ng-template>
+    </div>
+
+</div>

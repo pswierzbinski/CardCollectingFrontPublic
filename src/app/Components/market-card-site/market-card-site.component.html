@@ -1,0 +1,136 @@
+@if(card){
+
+<body style="font-family: Lato-Black; color: #fff"
+    class="overflow-y-hidden overflow-x-hidden flex flex-col items-center">
+    @if(accountService.currentUserSignal()){
+    <button class="fixed right-10 top-[90%]" (click)="showDialog(addRecord)"><tui-icon icon="@tui.badge-plus"
+            [style.height.px]="50" [style.width.px]="50" [style.color]="000" />
+        <p class="text-lg">Place order</p>
+    </button>
+    }
+    <div class="w-full h-72 mt-16 flex flex-col items-center gap-5">
+        <div class="flex flex-row gap-8">
+            <div
+                class="left-4 bg-main-bg opacity-90 rounded-2xl border-main-bg border-opacity-30 backdrop-blur-sm w-[11rem] h-[14.8rem] shadow ">
+                <button routerLink="/card/{{cardId}}" class="ml-2 mt-2 zoom">
+                    <img class="w-40" src="{{imagePrefix+card.name}}">
+                </button>
+            </div>
+            <div class="flex flex-col self-center">
+                <h1 class="text-3xl self-center">{{card.name}}</h1>
+                <h3 class=" hover:underline hover:cursor-pointer self-center pt-3" routerLink="/card/{{cardId}}">Card
+                    site</h3>
+            </div>
+        </div>
+        <div class="bg-main-bg w-fit rounded-lg">
+            <tui-segmented [(activeItemIndex)]="view" tuiTheme="dark">
+                <button type="button"><tui-icon icon="@tui.receipt" />Current orders</button>
+                <button type="button"><tui-icon icon="@tui.chart-no-axes-combined" />Statistics</button>
+            </tui-segmented>
+        </div>
+    </div>
+    @if(view === 0){
+    <div class="flex flex-row mt-5 gap-10">
+        <div
+            class="flex flex-col items-center pr-5 bg-main-bg opacity-90 text-opacity-100 rounded-2xl border-main-bg border-opacity-30 backdrop-blur-sm w-fit h-fit">
+            <h1 class="pt-4 text-2xl">Current sell orders</h1>
+            <app-records-list [records]="currentSellRecords" [listType]="'sell'"></app-records-list>
+        </div>
+        <div
+            class="flex flex-col items-center pr-5 bg-main-bg opacity-90 text-opacity-100 rounded-2xl border-main-bg border-opacity-30 backdrop-blur-sm w-fit h-fit">
+            <h1 class="pt-4 text-2xl">Current buy orders</h1>
+            <app-records-list [records]="currentBuyRecords" [listType]="'buy'"></app-records-list>
+        </div>
+    </div>}
+    @else {
+    <div class="flex flex-col items-center mt-5">
+        <div class="flex flex-row gap-[21rem]">
+            <div class="">
+                <h1 class="text-2xl">Total summary</h1>
+                <div class="bg-main-bg w-96 h-32 rounded-2xl flex flex-col">
+                    <div class="flex-row flex justify-between">
+                        <h2 class="text-lg pl-3 pt-3">Total units traded:</h2>
+                        <h2 class="text-lg pr-3 pt-3">{{totalSold}}</h2>
+                    </div>
+                    <div class="flex-row flex justify-between">
+                        <h2 class="text-lg pl-3 pt-3">Highest recorded price:</h2>
+                        <h2 class="text-lg pr-3 pt-3">{{highestPrice}}</h2>
+                    </div>
+                    <div class="flex-row flex justify-between">
+                        <h2 class="text-lg pl-3 pt-3">Lowest recorded price:</h2>
+                        <h2 class="text-lg pr-3 pt-3">{{lowestPrice}}</h2>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <h1 class="text-2xl">Current orders summary</h1>
+                <div class="bg-main-bg w-96 h-32 rounded-2xl flex flex-col">
+                    <div class="flex-row flex justify-between">
+                        <h2 class="text-lg pl-3 pt-3">Total ammount on sale:</h2>
+                        <h2 class="text-lg pr-3 pt-3">{{currentSellQuantity}}</h2>
+                    </div>
+                    <div class="flex-row flex justify-between">
+                        <h2 class="text-lg pl-3 pt-3">Current lowest sell price:</h2>
+                        @if(currentLowestSellPrice != 0){
+                        <h2 class="text-lg pr-3 pt-3">{{currentLowestSellPrice}}</h2>
+                        }@else {
+                        <h2 class="text-lg pr-3 pt-3">No sell orders</h2>
+                        }
+                    </div>
+                    <div class="flex-row flex justify-between">
+                        <h2 class="text-lg pl-3 pt-3">Highest buy price:</h2>
+                        @if(currentHighestBuyPrice != 0){
+                        <h2 class="text-lg pr-3 pt-3">{{currentHighestBuyPrice}}</h2>
+                        }@else {
+                        <h2 class="text-lg pr-3 pt-3">No buy orders active</h2>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="flex flex-col items-center mt-2">
+        <h1 class="text-2xl">Last month graphs</h1>
+        <div id="graphsWrap" class="flex flex-row gap-40 mt-10">
+            <div id="priceGraphWrap" class="text-center">
+                <app-sold-price [marketInfoForChart]="oldOrdersForChart"></app-sold-price>
+            </div>
+            <div id="quantityGraphWrap" class="text-center">
+                <app-sold-quantity [marketInfoForChart]="oldOrdersForChart"></app-sold-quantity>
+            </div>
+        </div>
+    </div>
+    }
+</body>
+<ng-template #addRecord let-observer>
+    <form [formGroup]="addOrderForm" (ngSubmit)="observer.next(true);observer.complete()" #actorForm="ngForm">
+        <p>
+            Card name: <strong>{{ card.name }}</strong>
+        </p>
+        <div class="flex flex-row items-center my-2">
+            <p> Order type:</p>
+            <tui-segmented [(activeItemIndex)]="sellOrder" class="w-fit ml-1">
+                <button type="button">Sell</button>
+                <button type="button">Buy</button>
+            </tui-segmented>
+        </div>
+        <tui-input-number tuiTextfieldPostfix=" PLN" [min]="0.01" [step]="0.01" [tuiNumberFormat]="{precision: 2}"
+            formControlName="priceValue">
+            Unit price
+        </tui-input-number>
+        <tui-input-number tuiTextfieldPrefix="x " [min]=1 [step]="1" [tuiNumberFormat]="{precision: 0}"
+            formControlName="quantityValue">
+            Quantity
+        </tui-input-number>
+        <div class="flex flex-row items-center">
+            <button size="m" tuiButton type='submit' [disabled]="!addOrderForm.valid">
+                Place order
+            </button>
+            <button size="m" tuiButton type="button" (click)="observer.next(false);observer.complete()">
+                Cancel
+            </button>
+        </div>
+    </form>
+</ng-template>
+
+}

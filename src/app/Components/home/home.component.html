@@ -1,0 +1,16 @@
+<body class="flex flex-col align-middle text-center" style="font-family: Lato-Black; color: #fff">
+    <img class="self-center pt-10" src="cardcollectinglogo-sm.png">
+    <h1 class="text-lg pt-10">Keep track of <strong>Your</strong> collection, expand it by trading with others and share it on Your profile!</h1>
+    <div id="carousel" class="self-center w-1/2 mt-2 bg-main-bg rounded-lg">
+        <tui-carousel class="p" [draggable]="true" [itemsCount]="3" [(index)]="index">
+            <ng-container *ngFor="let item of cardNames; let i = index">
+                <img *tuiItem alt="" draggable="false" src="{{item}}" class="item"
+                    [class.item_active]="i === index + 1" />
+            </ng-container>
+        </tui-carousel>
+    </div>
+    <h1 class="relative mt-2 self-center text-lg">ALL USED CARDS GRAPHICS AND DESCRIPTIONS ARE BORROWED FROM THE FREE OPEN SOURCE GAME <strong>ARCMAGE</strong></h1>
+    <div class="flex flex-row relative self-center"><a class=" text-lg underline cursor-pointer" (click)="openLink()">CHECK THEIR GAME </a><a class="mt-1 ml-2">(this is an outside link)</a></div>
+
+    <h1 class="fixed top-16 left-16 text-base">Aplikacja powstała na Wydziale Informatyki Politechniki Białostockiej</h1>
+</body>

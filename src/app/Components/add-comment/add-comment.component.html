@@ -1,0 +1,12 @@
+<div class="w-64 max-w-64">
+    <form [formGroup]="addCommentForm" (ngSubmit)="onSubmit()" #actorForm="ngForm" class="flex flex-col">
+        <tui-textfield tuiTheme="dark" class="w-64 h-24">
+            <label tuiLabel> Add comment</label>
+            <input placeholder="Woah, that card is really cool" tuiTextfield required formControlName="value"
+                type='text' />
+        </tui-textfield>
+        <button type="submit"
+            class="border font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 float-right ml-auto mt-1"
+            [disabled]="!actorForm.form.valid">Add Comment</button>
+    </form>
+</div>

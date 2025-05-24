@@ -1,0 +1,141 @@
+@if(card != undefined){
+
+<body style="font-family: Lato-Black; color: #fff" class="overflow-y-hidden overflow-x-hidden h-full">
+
+    <body>
+        <div id="container1" class="h-full relative top-10">
+            <div class=" left-[34rem]  bg-main-bg opacity-90 text-opacity-100 rounded-2xl border-main-bg border-opacity-30 backdrop-blur-sm w-[40rem] h-[5.5rem]
+        shadow relative flex-wrap flex-col flex items-center ">
+                <h1 id="name" class="text-3xl text-white font-bold self-top text-center pt-2">{{card.name}}
+                </h1>
+            </div>
+            <div class="left-[20rem] top-3 relative flex-row flex">
+                <div class="flex-col flex relative top-32">
+                    @if(accountService.currentUserSignal()){
+                    <button class="text-white font-bold self-top text-center items-center" (click)="addToWishlist()"
+                        [tuiHint]="addWishlist" [tuiHintDirection]="'top'" [tuiHintAppearance]="'dark'"><tui-icon
+                            icon="@tui.material.filled.favorite_border" [style.height.px]="50" [style.width.px]="50"
+                            [style.color]="000" *ngIf="!inWishlist" /></button>
+                    <button class="text-white font-bold self-top text-center items-center" [tuiHint]="removeWishlist"
+                        [tuiHintDirection]="'top'" [tuiHintAppearance]="'dark'" (click)="removeFromWishlist()"><tui-icon
+                            icon="@tui.material.filled.favorite" [style.height.px]="50" [style.width.px]="50"
+                            [style.color]="000" *ngIf="inWishlist" /></button>
+                    <button class="text-white font-bold self-top text-center items-center" [tuiHint]="addCollection"
+                        [tuiHintDirection]="'top'" [tuiHintAppearance]="'dark'"
+                        (click)="showDialog(addCard,card.id,1)"><tui-icon icon="@tui.material.filled.add"
+                            [style.height.px]="50" [style.width.px]="50" [style.color]="000" /></button>
+                    <button class="text-white font-bold self-top text-center items-center" #marketSite [tuiHint]="goToMarket"
+                    [tuiHintDirection]="'top'" [tuiHintAppearance]="'dark'"
+                        routerLink="/market/{{card.id}}"><tui-icon icon="@tui.shopping-cart" [style.height.px]="50"
+                            [style.width.px]="50" [style.color]="000" /></button> 
+                    }
+                </div>
+                <div class="relative left-2 flex w-[20rem]">
+                    <app-tilt class="relative top-4 left-9 z-[1]" [imageSource]="imagePrefix + card.name"></app-tilt>
+                    <figure
+                        class="absolute left-4 bg-main-bg opacity-90 rounded-2xl border-main-bg border-opacity-30 backdrop-blur-sm w-[17.5rem] h-[23.5rem] shadow ">
+                    </figure>
+                </div>
+                <div class="flex flex-col">
+                    <div class=" bg-main-bg opacity-90 text-opacity-100 rounded-2xl border-main-bg border-opacity-30 backdrop-blur-sm w-[55rem] h-[17rem] 
+         shadow relative flex-wrap flex-col flex items-center">
+                        <div class="inline-flex pt-5 gap-5 text-center text-lg">
+                            <h2 id="type">{{card.type}}</h2>
+                            <h2>-</h2>
+                            <h2 id="subtype">{{card.subtype}}</h2>
+                        </div>
+                        <div class="inline-flex mt-7 items-center self-top text-clip pb-5">
+                            <h3 id="ruleText" class="pl-5 pr-5 text-base">{{card.ruleText}}</h3>
+                        </div>
+                        <div class="inline-flex mt-7 items-center self-top text-clip pb-5">
+                            <h3 id="ruleText" class="pl-5 pr-5 text-lg">{{card.description}}</h3>
+                        </div>
+                    </div>
+                    <div class="mt-3 ml-[7.4rem] bg-main-bg opacity-90 text-opacity-100 rounded-2xl border-main-bg border-opacity-30 backdrop-blur-sm w-[40rem] h-[5rem] 
+         shadow flex-wrap flex-col flex items-center justify-between">
+                        <div class="inline-flex pt-3 items-center self-top text-clip">
+                            <p class="pr-2">Artist: </p>
+                            <p id="artist" class="">{{card.artist}}</p>
+                        </div>
+                        <div class="inline-flex pb-3 items-center self-top text-clip">
+                            <p class="pr-2">Licence: </p>
+                            <p id="licence" class="">{{card.licence}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex flex-row mt-5 relative left-[25.2rem] gap-7 h-[21rem]">
+                <app-add-comment class=" relative top-4" (addComment)="addCardComment($event)"></app-add-comment>
+                <div class="top-[34rem] left-[45rem] bg-main-bg opacity-90 text-opacity-100 rounded-2xl border-main-bg border-opacity-30 backdrop-blur-sm w-[55rem] h-[18rem] 
+        shadow flex-col flex items-center text-wrap overflow-x-hidden">
+                    <h1 class="text-xl pt-3">Comments</h1>
+                    <div class="flex-col justify-center text-clip pt-2 h-[198px] overflow-y-auto">
+                        @if(comments){
+                        <ul class="flex-col" *ngFor="let cc of comments; index as i;">
+                            <li>
+                                <app-card-comment [cardComment]="cc"
+                                    (deleteEvent)="deleteComment(choose,$event)"></app-card-comment>
+                            </li>
+                        </ul>
+                        }
+                        @if(!comments){
+                        <h1 class="text-3xl">No comments yet</h1>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </body>
+    <ng-template #addWishlist class="">
+        Add card to wishlist
+    </ng-template>
+    <ng-template #removeWishlist class="">
+        Remove card from wishlist
+    </ng-template>
+    <ng-template #addCollection class="">
+        Add card to collection
+    </ng-template>
+    <ng-template #goToMarket class="">
+        Visit cards market site
+    </ng-template>
+    <ng-template #addCard let-observer size="m" [tuiTextfieldAppearance]="'dark'">
+        <div class="flex flex-col pl-5 ">
+            <p>
+                Card name: <strong>{{ card.name }}</strong>
+            </p>
+            <br />
+            <tui-textfield class="w-64 h-24">
+                <label tuiLabel> Choose quantity</label>
+                <input placeholder="1" tuiTextfield [(ngModel)]="quantityValue" />
+            </tui-textfield>
+            <div class="flex flex-row gap-5">
+                <button size="m" tuiButton type="button" (click)="observer.next(quantityValue);observer.complete()">
+                    Add
+                </button>
+                <button size="m" tuiButton type="button" (click)="observer.complete()">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </ng-template>
+    <ng-template #choose let-observer>
+        <div class="wrapper">
+            <p>Are you sure you want to delete the comment?</p>
+            <button size="m" tuiButton type="button" (click)="observer.next(true);observer.complete()">
+                Yes
+            </button>
+            <button size="m" tuiButton type="button" (click)="observer.next(false);observer.complete()">
+                No
+            </button>
+        </div>
+    </ng-template>
+</body>
+}
+@if(card == undefined){
+<tui-block-status class="fixed">
+    <img alt="not found" src="/not-found.svg" tuiSlot="top" class="image" />
+    <h4>Card not found</h4>
+    <a class="text-lg">Check if the id is correct</a>
+</tui-block-status>
+}

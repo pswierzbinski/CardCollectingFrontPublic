@@ -1,0 +1,18 @@
+.background{
+    background-repeat:no-repeat;
+    background-size:cover;
+    overflow:hidden;
+    position:fixed;
+    filter: blur(2px);
+    top:20px;
+    left:20px;
+    height: 100%;
+    width:100%;
+    z-index: -1;
+    background-color: #043b3b;
+    background: linear-gradient(
+      rgba(0, 0, 0, 0.5), 
+      rgba(0, 0, 0, 0.5)
+    ), url(/sebastian-unrau-unsplash.jpg);
+  }
+  /* background image from free Unsplash library, original author: Sebastian Unrau */

@@ -1,0 +1,113 @@
+@if(user){
+
+<body style="font-family: Lato-Black; color: #fff"
+    class="overflow-y-hidden overflow-x-hidden flex flex-col items-center">
+    <div class="w-full h-full mt-16 pr-20 flex flex-col items-center gap-5">
+        <div id="profileInfoBox" class="bg-main-bg w-[900px] ml-4 h-full rounded-2xl flex flex-row">
+            <div class="flex flex-col w-[360px] pb-4">
+                <div id="profilePicName" class="flex flex-row ml-10 mt-10 ">
+                    <div class=" opacity-90 rounded-full border-[#326363]  w-fit h-fit shadow ">
+                        <div class="m-1 zoom">
+                            <img class="w-15" src="user.png">
+                        </div>
+                    </div>
+                    <h1 class="text-2xl ml-3 mt-8 ">{{userName}}</h1>
+                </div>
+                <p class="pl-12 text-xs">Member since: {{user.creationDate | date: 'mediumDate'}}</p>
+            </div>
+            <div id="statsBoxWrapper" class="flex flex-row gap-12">
+                <div id="statsBox" class="flex flex-col gap-5">
+                    <p class="mt-2 text-3xl">User stats</p>
+
+                    <div class="flex flex-row gap-4">
+                        <p>Total cards in collection: </p>
+                        <p class="">{{cardsInCollection}}</p>
+                    </div>
+                    <div class="flex flex-row gap-[1.8rem]">
+                        <p>Total cards in wishlist: </p>
+                        <p>{{cardsInWishlist}}</p>
+                    </div>
+                </div>
+                <div id="statsBox2" class="flex flex-col gap-5 pt-16">
+                    <div class="flex flex-row gap-4">
+                        <p>Buying: </p>
+                        <p class="">{{cardsBuying}} cards</p>
+                    </div>
+                    <div class="flex flex-row gap-[1.8rem]">
+                        <p>Selling: </p>
+                        <p class="">{{cardsSelling}} cards</p>
+                    </div>
+                </div>
+                @if(this.accountService.currentUserSignal()?.username != userName){
+                <button routerLink="/chat/{{userName}}" class="self-center pt-5">
+                    <tui-icon icon="@tui.mail" [style.height.px]="30" [style.width.px]="30" [style.color]="000" />
+                    <p>Chat with {{userName}}</p>
+                </button>}
+            </div>
+        </div>
+        <div class="bg-main-bg w-fit rounded-lg">
+            <tui-segmented [(activeItemIndex)]="view" tuiTheme="dark">
+                <button type="button">Collection</button>
+                <button type="button">Wishlist</button>
+                <button type="button">Market orders</button>
+            </tui-segmented>
+        </div>
+        @if(view == 0){
+        <div id="collection">
+            @if(hasCollection){
+            <app-collection [userName]="userName" [cards]="cards" [quantity]="quantity"
+                [quantityMap]="quantityMap"></app-collection>
+            }
+            @else {
+            <div class="pt-10 flex flex-col items-center">
+                <tui-icon icon="@tui.octagon-alert" [style.height.px]="45" [style.width.px]="45"
+                    [style.color]="000"></tui-icon>
+                <h1 class="text-xl"> This user does not have a collection yet</h1>
+            </div>
+            }
+        </div>
+        }@else if(view == 1){
+        <div id="wishlist">
+            @if(hasWishlist){
+            <app-wishlist [userName]="this.accountService.currentUserSignal()?.username" [wishlist]="wishlist"
+                [quantityMap]="quantityMap"></app-wishlist>
+            }@else {
+            <div class="pt-10 flex flex-col items-center">
+                <tui-icon icon="@tui.octagon-alert" [style.height.px]="45" [style.width.px]="45"
+                    [style.color]="000"></tui-icon>
+                <h1 class="text-xl"> This user does not have a wishlist yet</h1>
+            </div>
+            }
+        </div>
+        }@else if(view == 2){
+        <div class="flex flex-row gap-10">
+            <div
+                class="flex flex-col items-center pr-5 bg-main-bg opacity-90 text-opacity-100 rounded-2xl border-main-bg border-opacity-30 backdrop-blur-sm w-fit h-fit">
+                @if(userName == this.accountService.currentUserSignal()?.username){
+                <h1 class="pt-4 text-2xl">Your current sell orders</h1>
+                }@else{
+                <h1 class="pt-4 text-2xl">{{userName}}'s current sell orders</h1>
+                }
+                <app-users-records-list [records]="currentSellRecords" [listType]="'sell'"
+                    [userName]="userName"></app-users-records-list>
+            </div>
+            <div
+                class="flex flex-col items-center pr-5 bg-main-bg opacity-90 text-opacity-100 rounded-2xl border-main-bg border-opacity-30 backdrop-blur-sm w-fit h-fit">
+                @if(userName == this.accountService.currentUserSignal()?.username){
+                <h1 class="py-4 text-2xl">Your current buy orders</h1>
+                }@else{
+                <h1 class="py-4 text-2xl">{{userName}}'s current buy orders</h1>
+                }
+                <app-users-records-list [records]="currentBuyRecords" [listType]="'buy'"
+                    [userName]="userName"></app-users-records-list>
+            </div>
+        </div>
+        }
+    </div>
+</body>
+}@else {
+<div class="flex flex-col items-center">
+    <h1 class="text-3xl mt-10">User not found</h1>
+    <p class="text-xl">The user you are looking for does not exist</p>
+</div>
+}

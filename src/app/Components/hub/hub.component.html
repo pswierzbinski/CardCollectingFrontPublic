@@ -1,0 +1,42 @@
+<body style="font-family: Lato-Black; color: #fff">
+    <div class="overflow-y-visible flex flex-col items-center w-full gap-4">
+        <div class="text-3xl mt-20 w-full text-center">
+            <h1>Your personal hub</h1>
+        </div>
+        <div class="bg-main-bg w-fit rounded-lg">
+            <tui-segmented [(activeItemIndex)]="view" tuiTheme="dark">
+                <button type="button">Collection</button>
+                <button type="button">Wishlist</button>
+                <button type="button">Market orders</button>
+            </tui-segmented>
+        </div>
+        @if(view == 0){
+        @if(this.cards){
+        <app-collection [userName]="this.accountService.currentUserSignal()?.username" [simpleWishlist]="simpleWishlist"
+            [cards]="cards" [quantity]="quantity" [quantityMap]="quantityMap"
+            (updateCardsEvent)="updateCardsEvent($event)"
+            (updateQuantityEvent)="updateQuantityEvent($event)"></app-collection>}
+        @else {
+        <app-collection></app-collection>
+        }
+        }
+        @else if(view == 1){
+        <app-wishlist [userName]="this.accountService.currentUserSignal()?.username" [wishlist]="wishlist"
+            [simpleWishlist]="simpleWishlist" [quantityMap]="quantityMap"
+            (updateWishlistEvent)="updateWishlistEvent($event)"></app-wishlist>
+        }@else if(view == 2){
+        <div class="flex flex-row gap-10">
+            <div
+                class="flex flex-col items-center pr-5 bg-main-bg opacity-90 text-opacity-100 rounded-2xl border-main-bg border-opacity-30 backdrop-blur-sm w-fit h-fit">
+                <h1 class="pt-4 text-2xl">Your current sell orders</h1>
+                <app-users-records-list [records]="currentSellRecords" [listType]="'sell'"></app-users-records-list>
+            </div>
+            <div
+                class="flex flex-col items-center pr-5 bg-main-bg opacity-90 text-opacity-100 rounded-2xl border-main-bg border-opacity-30 backdrop-blur-sm w-fit h-fit">
+                <h1 class="pt-4 text-2xl">Your current buy orders</h1>
+                <app-users-records-list [records]="currentBuyRecords" [listType]="'buy'"></app-users-records-list>
+            </div>
+        </div>
+        }
+    </div>
+</body>

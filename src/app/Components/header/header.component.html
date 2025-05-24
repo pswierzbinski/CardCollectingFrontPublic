@@ -1,0 +1,90 @@
+<div class="custom-portal"><ng-container #viewContainer /></div>
+<header [style.color]="'#03cda4'" tuiNavigationHeader style="z-index: 2;">
+
+    <span tuiNavigationLogo routerLink="home" class="cursor-pointer">
+        <tui-icon icon="@tui.home" />
+        <span [style.color]="'#ffffff'" tuiFade>Card Collecting Helper</span>
+    </span>
+
+    <hr />
+    @if(this.accountService.currentUserSignal())
+    {
+    <button appearance="secondary" iconStart="@tui.mail" tuiButton type="button"
+        routerLink="chat/{{accountService.currentUserSignal()?.username}}">
+        Messages
+    </button>
+    <button tuiDropdownOpen type="button" [tuiDropdown]="profile">
+        <tui-avatar class="text">
+            <div tuiFade>{{accountService.currentUserSignal()?.username}}</div>
+        </tui-avatar>
+    </button>
+
+    <ng-template #profile>
+        <tui-data-list size="s">
+            <button iconStart="@tui.user" tuiButton type="button"
+                routerLink="/profile/{{accountService.currentUserSignal()?.username}}">
+                Profile
+            </button>
+            <button iconStart="@tui.minus" tuiButton type="button" (click)="logOut()">
+                Log out
+            </button>
+        </tui-data-list>
+    </ng-template>
+    }@else {
+    <button tuiDropdownOpen type="button" [tuiDropdown]="notLogged" class="pr-2">
+        <tui-icon icon="@tui.user">
+
+        </tui-icon>
+    </button>
+
+    <ng-template #notLogged>
+        <tui-data-list size="s">
+            <button iconStart="@tui.log-in" tuiButton type="button" routerLink="/login" class="z-10">
+                Log in
+            </button>
+            <button iconStart="@tui.user-round-plus" tuiButton type="button" routerLink="/register">
+                Register
+            </button>
+        </tui-data-list>
+    </ng-template>
+    }
+</header>
+<div [style.display]="'flex'">
+    <aside [style.height]="'94.9vh'" [tuiNavigationAside]="expanded">
+        <header>
+            <button [style.color]="'#03cda4'" iconStart="@tui.home" tuiAsideItem type="button" routerLink="home"
+                style="text-decoration: none;">
+                <span tuiFade>Home</span>
+            </button>
+        </header>
+        <button [style.color]="'#03cda4'" iconStart="@tui.book-a" tuiAsideItem type="button" routerLink="browse">
+            Browse all cards
+        </button>
+        @if(this.accountService.currentUserSignal())
+        {
+        <a [style.color]="'#03cda4'" iconStart="@tui.book-check" tuiAsideItem routerLink="collection/collection">
+            Collection
+        </a>
+        <!-- left for future implementation of a main site of market-->
+        <!--  
+        <a [style.color]="'#03cda4'" iconStart="@tui.coins" tuiAsideItem routerLink="market">this aint workin yet, no market component-->
+        <!-- Card market
+        </a> 
+        -->
+        <button [style.color]="'#03cda4'" automation-id="hint" iconStart="@tui.heart" tuiAsideItem type="button"
+            routerLink="collection/wishlist">
+            <span tuiFade>Wishlist</span>
+        </button>
+        }
+        <hr />
+        <footer>
+            <button [style.color]="'#03cda4'" tuiAsideItem type="button"
+                [iconStart]="expanded ? '@tui.chevron-left' : '@tui.chevron-right'" (click)="expanded = !expanded">
+                {{ expanded ? 'Collapse' : 'Expand' }}
+            </button>
+        </footer>
+    </aside>
+    <main class="w-full h-full overflow-x-hidden">
+        <router-outlet />
+    </main>
+</div>

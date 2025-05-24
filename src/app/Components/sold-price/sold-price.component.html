@@ -1,0 +1,13 @@
+<div class=" bg-main-bg w-[35rem] rounded-lg">
+    <p class="">
+        <tui-input-date-range [maxLength]="maxLength" [(ngModel)]="range" tuiTheme="dark">
+            Range
+        </tui-input-date-range>
+    </p>
+    <h2 class="-mb-5">Daily sale price median</h2>
+    <tui-axes tuiTheme="dark" *ngIf="computeLabels$(range) | async as labels" class="axes" [axisXLabels]="labels"
+        [horizontalLines]="4" [verticalLines]="labels.length - 1">
+        <tui-line-days-chart class="chart" [height]="10" [value]="value" [xStringify]="xStringify$ | async"
+            [yStringify]="yStringify" />
+    </tui-axes>
+</div>

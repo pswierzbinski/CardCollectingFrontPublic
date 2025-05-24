@@ -1,0 +1,78 @@
+@if(messagedUser){
+<div class="h-full flex flex-col-reverse backdrop-blur-sm extraBg">
+    <div id="textBar">
+        <div class="w-full h-12 p-2 rounded-2xl border-main-bg border-opacity-30 ">
+            <form [formGroup]="sendMessage" (ngSubmit)="onSubmit()" #actorForm="ngForm"
+                class="flex flex-row w-full h-full rounded-2xl pl-5 bg-main-bg">
+                <input type="text"
+                    class=" text-white relative w-full h-full rounded-2xl border-none outline-none pl-5 bg-main-bg"
+                    placeholder="Type a message..." formControlName="content" />
+                <button class="text-white font-bold self-center text-center items-center absolute" tuiButton
+                    type='submit' [disabled]="!sendMessage.valid"><tui-icon icon="@tui.send-horizontal"
+                        [style.height.px]="20" [style.width.px]="20" [style.color]="000" /></button>
+            </form>
+        </div>
+    </div>
+    <div id="messages" class="container w-full h-[592px] overflow-y-auto scroll-auto">
+        <ul *ngFor="let message of messagesWithUser; index as i; let isLast=last" class="flex flex-col">
+            @if(message.authorId == accountService.currentUserSignal()?.id){
+            @if(i == 0 || messagesWithUser[i-1].authorId != message.authorId ||
+            !dateTenMinutesApart(messagesWithUser[i-1].messageDate, message.messageDate)){
+            <div class="self-end flex flex-row gap-3 mt-4 pr-2">
+                <p class="pl-2"> {{message.messageDate.toISOString() | date:'MMM dd, H:mm'}}</p>
+            </div>
+            }
+            <li class="self-end bg-main-bg rounded-xl p-2 mr-2 w-fit max-w-[700px] text-clip">
+                <p class="text-white">{{message.content}}</p>
+            </li>
+            }@else{
+            <li class="flex flex-col pl-1">
+                @if(i == 0 || messagesWithUser[i-1].authorId != message.authorId ||
+                !dateTenMinutesApart(messagesWithUser[i-1].messageDate, message.messageDate)){
+                <div class="flex flex-row gap-3 mt-4 pl-2">
+                    <tui-avatar class="bg-secondary mb-2" [size]="'xs'">
+                        <img src="user.png" />
+                    </tui-avatar>
+                    <p> {{messagedUser.userName}}</p>
+                    <p class="pl-2"> {{message.messageDate.toISOString() | date:'MMM dd, H:mm'}}</p>
+                </div>
+                }
+                <div class="self-start bg-main-bg rounded-xl p-2 ml-9 w-fit max-w-[700px] text-clip">
+                    <p class="text-white pl-1 pr-1">{{message.content}}</p>
+                </div>
+            </li>
+            }
+            @if(isLast){
+            <div>{{scrollToBottom()}}</div>
+            }
+        </ul>
+    </div>
+    @if(messagedUser.userName != accountService.currentUserSignal()?.username){
+    <div id="messagedUserInfo" class="h-14 border-b-2">
+        <div class="flex flex-row items-center justify-center pt-2.5">
+            <p class="text-base mr-2"> Chatting with:</p>
+            <div class="flex flex-row items-center justify-center cursor-pointer"
+                routerLink="/profile/{{messagedUser.userName}}">
+                <tui-avatar class="bg-secondary" [size]="'xs'">
+                    <img src="user.png" />
+                </tui-avatar>
+                <p class="pl-1.5 text-lg">{{messagedUser.userName}}</p>
+            </div>
+        </div>
+    </div>
+    }@else {
+    <div id="messagedUserInfo" class="h-14 border-b-2">
+        <div class="flex flex-row items-center justify-center pt-2.5">
+            <tui-icon class="mr-2" icon="@tui.notebook-pen" />
+            <p class="text-base mr-2"> Notes</p>
+        </div>
+    </div>
+    }
+</div>
+}@else {
+<div class="h-full w-full flex items-center">
+    <div id="box" class="">
+
+    </div>
+</div>
+}

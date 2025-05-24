@@ -1,0 +1,80 @@
+<div class=' flex justify-center items-center h-[90vh]' style="color: #03cda4">
+    <div
+        class='w-[26rem] relative bg-transparent backdrop-blur-xl text-white rounded-lg pt-7 pb-7 pl-10 pr-10 border-2 border-solid border-slate-600'>
+        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" #actorForm="ngForm">
+            <h1 class='text-4xl	text-center font-semibold' style="color:#fff">Create an account</h1>
+            <div class="flex flex-col h-20">
+                <div class='relative w-full h-12 mt-8'>
+                    <input formControlName="name" type='text' required placeholder='Name' autoComplete="off"
+                        class='w-full h-full border-2 border-solid border-slate-600 bg-transparent outline-none color-white rounded-s-3xl rounded-e-3xl pt-5 pr-11 pb-5 pl-5 bg-[#0c4a4a]'
+                        style="color:#fff" />
+                </div>
+                @if(!registerForm.controls.name.valid && registerForm.controls.name.touched){
+                <div class="w-full h-4 text-center">
+                    <p class='text-[#ff0000] text-sm font-bold'>Name must be at least 6 characters long</p>
+                </div>
+                }
+            </div>
+            <div class="flex flex-col h-20">
+                <div class='relative w-full h-12 mt-8'>
+                    <input formControlName="email" type='text' required placeholder='E-mail' autoComplete="off"
+                        class='w-full h-full border-2 border-solid border-slate-600 bg-transparent outline-none color-white rounded-s-3xl rounded-e-3xl pt-5 pr-11 pb-5 pl-5 bg-[#0c4a4a]'
+                        style="color:#fff" />
+                </div>
+                @if(!registerForm.controls.email.valid && registerForm.controls.email.touched){
+                <div class="w-full h-4 text-center">
+                    <p class='text-[#ff0000] text-sm font-bold'>Email must be a valid email</p>
+                </div>}
+            </div>
+            <div class="flex flex-col h-20">
+
+                <div class='relative w-full h-12 mt-8'>
+                    <input formControlName="password" type="{{showPassword ? 'text' : 'password'}}" required
+                        placeholder='Password' autoComplete="off"
+                        class='w-full h-full border-2 border-solid border-slate-600 outline-none rounded-s-3xl rounded-e-3xl pt-5 pr-11 pb-5 pl-5 bg-transparent bg-[#0c4a4a]'
+                        style="color:#fff" />
+                    <button class="-translate-y-1/2 -top-1/2 -right-[17rem] absolute " appearance="secondary"
+                        iconStart="@tui.plus" tuiButton type="button" (click)="togglePassword()">
+                        <tui-icon icon="{{showPassword ? '@tui.eye-off' : '@tui.eye'}}" />
+                    </button>
+                </div>
+                @if(!registerForm.controls.password.valid && registerForm.controls.password.touched){
+                <div class="w-full h-4 text-center">
+                    <p class='text-[#ff0000] text-sm font-bold'>Password must be at least 12 characters long</p>
+                </div>}
+            </div>
+            <div class="flex flex-col h-[92px]">
+
+                <div class='relative w-full h-12 mt-8'>
+                    <input formControlName="confirmPassword" type="{{showConfirmPassword ? 'text' : 'password'}}"
+                        required placeholder='Repeat password' autoComplete="off"
+                        class='w-full h-full border-2 border-solid border-slate-600 outline-none rounded-s-3xl rounded-e-3xl pt-5 pr-11 pb-5 pl-5 bg-transparent bg-[#0c4a4a]'
+                        style="color:#fff" />
+                    <button class="-translate-y-1/2 -top-1/2 -right-[17rem] absolute " appearance="secondary"
+                        iconStart="@tui.plus" tuiButton type="button" (click)="toggleConfirmPassword()">
+                        <tui-icon icon="{{showConfirmPassword ? '@tui.eye-off' : '@tui.eye'}}" />
+                    </button>
+                </div>
+                @if(!registerForm.controls.confirmPassword.valid && registerForm.controls.confirmPassword.touched &&
+                registerForm.controls.password.value !== registerForm.controls.confirmPassword.value &&
+                registerForm.controls.password.touched){
+                <div class="w-full h-4 text-center">
+                    <p class='text-[#ff0000] text-sm font-bold'>Passwords must match</p>
+                </div>}
+            </div>
+            <br />
+            <button type='submit' [disabled]="!actorForm.form.valid"
+                class='btn w-full h-11 border outline-none rounded-s-3xl rounded-e-3xl shadow cursor-pointer text-base text-slate-800 font-bold disabled:bg-slate-500'>
+                Register
+            </button>
+        </form>
+        <div class='text-sm text-center mt-5 mb-4'>
+            <p class='text-white no-underline font-semibold'>
+                Already a Card Collecting Helper member?<br>
+                <button class='text-white no-underline font-semibold hover:underline' routerLink="/login">
+                    Login
+                </button>
+            </p>
+        </div>
+    </div>
+</div>

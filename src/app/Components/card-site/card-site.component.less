@@ -1,0 +1,82 @@
+@import '@taiga-ui/core/styles/taiga-ui-local.less';
+	 
+	.color() {
+	    color: var(--tui-chart-categorical-01);
+	 
+	    &:first-child {
+	        color: var(--tui-chart-categorical-08);
+	    }
+	 
+	    &:last-child {
+	        color: var(--tui-chart-categorical-12);
+	    }
+	}
+	 
+	.axes {
+	    block-size: 12.5rem;
+	}
+	 
+	.controls {
+	    display: flex;
+	 
+	    tui-input-date-range {
+	        flex: 1;
+	    }
+	}
+	 
+	.legend {
+	    display: flex;
+	    justify-content: center;
+	    align-items: center;
+	}
+	 
+	.item {
+	    .color();
+	 
+	    display: flex;
+	    align-items: center;
+	    margin: 0 0.75rem;
+	 
+	    &::before {
+	        content: '';
+	        border-bottom: 0.125rem solid;
+	        inline-size: 1rem;
+	        margin-right: 0.5rem;
+	    }
+	}
+	 
+	.name {
+	    color: var(--tui-text-primary);
+	}
+	 
+	.value {
+	    color: #fff;
+	}
+	 
+	.chart {
+	    .color();
+	    .fullsize();
+	}
+
+//generated with https://codepen.io/stephenpaton-tech/full/JjRvGmY
+/* ===== Scrollbar CSS ===== */
+  /* Firefox */
+  * {
+	scrollbar-width: thin;
+    scrollbar-color: #062424 #ffffff;
+  }
+
+  /* Chrome, Edge, and Safari */
+  *::-webkit-scrollbar {
+    width: 12px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: #ffffff;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background-color: #240607;
+    border-radius: 10px;
+    border: 3px solid #ffffff;
+  }

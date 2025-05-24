@@ -1,0 +1,47 @@
+<div class="flex flex-col mt-10" style="font-family: Lato-Black; color: #fff" class="overflow-y-hidden">
+    <h1 class="text-3xl self-center text-center my-6">Messages</h1>
+    <div class=" flex flex-row relative gap-5 left-72 w-[1288px] h-full">
+        <div id="chats" class="backdrop-blur-sm">
+            <div id="recentlyMessagedUsers" class="h-[636px] border-2 w-60 text-center">
+                <!-- template for messaged users -->
+                <h1 class="border-b-2 h-16 text-xl text-center pt-4">Recently messaged</h1>
+                <div class="overflow-y-scroll h-[568px] container">
+                <ul *ngFor="let mu of messagedUsers; index as i;">
+                    @if((messagingUser && mu.userName != messagingUser.userName) || !messagingUser) {
+                    <li class="border-b-2  h-16 cursor-pointer" routerLink="/chat/{{mu.userName}}">
+                        <tui-avatar class="mt-2" [size]="'xs'">
+                            <img src="user.png" />
+                        </tui-avatar>
+                        <p class="text-lg">{{mu.userName}}</p>
+                    </li>
+                    }@else {
+                    <li class="border-b-2 h-16 bg-main-bg">
+                        <tui-avatar class="mt-2" [size]="'xs'">
+                            <img src="user.png" />
+                        </tui-avatar>
+                        <p class="text-lg">{{mu.userName}}</p>
+                    </li>
+                    }
+                </ul>
+            </div>
+            </div>
+            <div id="notes" class="text-center border-b-2 border-x-2">
+                @if(!messagingUser || messagingUser.userName != accountService.currentUserSignal()?.username ) {
+                    <div class="h-16 cursor-pointer" routerLink="/chat/{{accountService.currentUserSignal()?.username}}">
+                        <tui-icon class="mt-2" icon="@tui.notebook-pen"/>
+                        <p class="text-lg">{{"Notes"}}</p>
+                    </div>
+                    }@else {
+                    <div class="h-16 bg-main-bg">
+                        <tui-icon class="mt-2" icon="@tui.notebook-pen"/>
+                        <p class="text-lg">{{"Notes"}}</p>
+                    </div>
+                    }
+            </div>
+        </div>
+        <div id="chatBox" class="border-2 w-[1028px]">
+            <app-chat [messagesWithUser]="messagesWithUser" [messagedUser]="messagingUser"
+                (updateMessagesEvent)="updateMessagesEvent($event)"></app-chat>
+        </div>
+    </div>
+</div>
